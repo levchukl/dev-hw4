@@ -1,0 +1,13 @@
+2023-02-01 13:32:57 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLIENT" not found (this database is empty); SQL statement:
+SELECT name, count(project.id) AS project_count
+FROM client
+JOIN project ON client.id = project.client_id
+GROUP BY name
+HAVING project_count IN(
+    SELECT count(id)
+    FROM project
+    GROUP BY client_id
+    ORDER BY count(id) DESC
+    LIMIT 1
+); [42104-214]
