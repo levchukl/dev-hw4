@@ -1,9 +1,10 @@
 package org.example.database;
 
+import org.example.prefs.Prefs;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Database {
     private static final Database INSTANCE = new Database();
@@ -12,8 +13,8 @@ public class Database {
 
     private Database() {
         try {
-            String dbUrl = "jdbc:h2:./MegaSoft";
-            connection = DriverManager.getConnection(dbUrl);
+            String connectionUrl = new Prefs().getPref(Prefs.DB_JDBC_CONNECTION_URL);
+            connection = DriverManager.getConnection(connectionUrl);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -21,14 +22,6 @@ public class Database {
     }
     public static Database getInstance(){
         return INSTANCE;
-    }
-    public int executeUpdate(String sql){
-        try (Statement statement = connection.createStatement()){
-            return statement.executeUpdate(sql);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        }
     }
     public Connection getConnection(){
         return connection;

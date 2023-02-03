@@ -1,26 +1,23 @@
 package org.example.database;
 
+import org.example.prefs.Prefs;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.stream.Collectors;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DatabaseInitService {
-    public static void main(String[] args) {
-        String fileRead = "src/main/resources/sql/init_db.sql";
-        String content = null;
-        try{
-            content = readFile(fileRead);
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+    public static void main(String[] args) throws IOException, SQLException {
+        String initDbFileName = new Prefs().getPref(Prefs.INIT_DB_SQL_FILE_PATH);
+        String sql = Files.readString(Paths.get(initDbFileName));
+
         Database database = Database.getInstance();
-        database.executeUpdate(content);
-        database.close();
-    }
-    public static String readFile(String file) throws IOException {
-        String content = Files.lines(Paths.get(file))
-                .collect(Collectors.joining(System.lineSeparator()));
-        return content;
+
+        Connection connection = database.getConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
     }
 }

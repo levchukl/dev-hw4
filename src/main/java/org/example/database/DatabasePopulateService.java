@@ -1,20 +1,24 @@
 package org.example.database;
 
-import java.io.IOException;
+import org.example.prefs.Prefs;
 
-import static org.example.database.DatabaseInitService.readFile;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 
 public class DatabasePopulateService {
-    public static void main(String[] args) {
-        String fileRead = "src/main/resources/sql/populate_db.sql";
-        String content = null;
-        try {
-            content = readFile(fileRead);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) throws IOException, SQLException {
+        String insertFileName = new Prefs().getPref(Prefs.INSERT_SQL_FILE_PATH);
+        String sql = Files.readString(Paths.get(insertFileName));
+
         Database database = Database.getInstance();
-        database.executeUpdate(content);
-        database.close();
+
+        Connection connection = database.getConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
     }
 }
