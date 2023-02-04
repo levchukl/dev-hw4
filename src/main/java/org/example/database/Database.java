@@ -9,8 +9,6 @@ import java.sql.SQLException;
 public class Database {
     private static final Database INSTANCE = new Database();
     private Connection connection;
-
-
     private Database() {
         try {
             String connectionUrl = new Prefs().getPref(Prefs.DB_JDBC_CONNECTION_URL);

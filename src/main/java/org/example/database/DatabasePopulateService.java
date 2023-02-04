@@ -11,14 +11,18 @@ import java.sql.Statement;
 
 
 public class DatabasePopulateService {
-    public static void main(String[] args) throws IOException, SQLException {
+    public static void main(String[] args) throws IOException {
         String insertFileName = new Prefs().getPref(Prefs.INSERT_SQL_FILE_PATH);
         String sql = Files.readString(Paths.get(insertFileName));
 
         Database database = Database.getInstance();
 
-        Connection connection = database.getConnection();
-        Statement statement = connection.createStatement();
-        statement.executeUpdate(sql);
+        try( Connection connection = database.getConnection()){
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        database.close();
     }
 }

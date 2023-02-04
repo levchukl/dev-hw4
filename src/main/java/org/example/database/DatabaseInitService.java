@@ -10,14 +10,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseInitService {
-    public static void main(String[] args) throws IOException, SQLException {
+    public static void main(String[] args) throws IOException {
         String initDbFileName = new Prefs().getPref(Prefs.INIT_DB_SQL_FILE_PATH);
         String sql = Files.readString(Paths.get(initDbFileName));
 
         Database database = Database.getInstance();
 
-        Connection connection = database.getConnection();
-        Statement statement = connection.createStatement();
-        statement.executeUpdate(sql);
+        try (Connection connection = database.getConnection()){
+             Statement statement = connection.createStatement();
+             statement.executeUpdate(sql);
+        } catch (SQLException e){
+        e.printStackTrace();
+    }
+        database.close();
     }
 }
+

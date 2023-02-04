@@ -35,6 +35,7 @@ public class DatabaseQueryService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        database.close();
         return clients;
     }
 
@@ -59,6 +60,7 @@ public class DatabaseQueryService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        database.close();
         return workers;
     }
 
@@ -86,6 +88,7 @@ public class DatabaseQueryService {
         }catch (SQLException e){
             e.printStackTrace();
         }
+        database.close();
         return workers;
     }
 
@@ -109,6 +112,7 @@ public class DatabaseQueryService {
         }catch (SQLException e){
             e.printStackTrace();
         }
+        database.close();
         return prices;
     }
 
@@ -133,6 +137,7 @@ public class DatabaseQueryService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        database.close();
         return projects;
     }
 }
